@@ -26,15 +26,15 @@
 - [X] T019 Ingestion Script: Create `backend/ingest.py` to recursively scan `docs-frontend/docs/`, chunk text based on Markdown headers, generate vector embeddings, and upsert payloads (Text + Metadata + Vector) into a dedicated Qdrant collection.
 - [X] T020 Seed Data: Execute `backend/ingest.py` to seed the vector database with the Week 1-4 content.
 - [X] T021 Verify Phase 2: Manually verify all tasks in Phase 2 are complete and functional.
-- [ ] T022 Git Merge: `git checkout main && git merge feature/rag-backend`
+- [X] T022 Git Merge: `git checkout main && git merge feature/rag-backend`
  
 ## Phase 3: The Intelligence (Agents & Skills) - `feature/agent-core`
-- [ ] T023 Git Checkout: `git checkout -b feature/agent-core`
-- [ ] T024 FastAPI Core: Create `backend/main.py` and define the root application and specific WebSocket endpoint `/ws/v1/chat` for real-time bidirectional communication.
-- [ ] T025 Gemini Skill: Create `backend/skills/translator.py`. Implement `translate_to_urdu(text: str)` utilizing the Gemini 2.5 Flash model.
-- [ ] T026 RAG Agent: Create `backend/agents/rag_agent.py` using the OpenAI Agents SDK. Define the RAG Tool (queries Qdrant) and the Translation Tool (registers the Gemini function). Construct the System Prompt to enforce the persona of a "Helpful Robotics Professor."
-- [ ] T027 WebSocket Runner: Implement the runner loop in FastAPI (`backend/main.py`) that instantiates the Agent, handles the message stream, and maintains the immediate session context.
-- [ ] T028 Verify Phase 3: Manually verify all tasks in Phase 3 are complete and functional.
+- [X] T023 Git Checkout: `git checkout -b feature/agent-core`
+- [X] T024 FastAPI Core: Create `backend/main.py` and define the root application and specific WebSocket endpoint `/ws/v1/chat` for real-time bidirectional communication.
+- [X] T025 Gemini Skill: Create `backend/skills/translator.py`. Implement `translate_to_urdu(text: str)` utilizing the Gemini 2.5 Flash model.
+- [X] T026 RAG Agent: Create `backend/agents/rag_agent.py` using the OpenAI Agents SDK. Define the RAG Tool (queries Qdrant) and the Translation Tool (registers the Gemini function). Construct the System Prompt to enforce the persona of a "Helpful Robotics Professor."
+- [X] T027 WebSocket Runner: Implement the runner loop in FastAPI (`backend/main.py`) that instantiates the Agent, handles the message stream, and maintains the immediate session context.
+- [X] T028 Verify Phase 3: Manually verify all tasks in Phase 3 are complete and functional.
 - [ ] T029 Git Merge: `git checkout main && git merge feature/agent-core`
 
 ## Phase 4: Identity & Personalization (Bonus) - `feature/auth-personalization`

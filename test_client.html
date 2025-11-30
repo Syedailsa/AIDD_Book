@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>WebSocket Chat Test</title>
+    <style>
+        body { font-family: sans-serif; margin: 20px; }
+        #chatbox { width: 80%; height: 400px; border: 1px solid #ccc; overflow-y: scroll; padding: 10px; margin-bottom: 10px; }
+        #messageInput { width: 70%; padding: 8px; margin-right: 10px; }
+        #sendButton { padding: 8px 15px; }
+        .user-message { color: blue; }
+        .agent-message { color: green; }
+    </style>
+</head>
+<body>
+    <h1>Physical AI Agent Chat</h1>
+    <div id="chatbox"></div>
+    <input type="text" id="messageInput" placeholder="Type your message...">
+    <button id="sendButton">Send</button>
+
+    <script>
+        const chatbox = document.getElementById("chatbox");
+        const messageInput = document.getElementById("messageInput");
+        const sendButton = document.getElementById("sendButton");
+
+        const ws = new WebSocket("ws://localhost:8000/ws/v1/chat");
+
+        ws.onopen = (event) => {
+            console.log("WebSocket connected");
+            chatbox.innerHTML += "<p><em>Connected to chat.</em></p>";
+        };
+
+        ws.onmessage = (event) => {
+            const data = JSON.parse(event.data);
+            chatbox.innerHTML += `<p class="agent-message"><strong>Professor:</strong> ${data.response}</p>`;
+            chatbox.scrollTop = chatbox.scrollHeight; // Scroll to bottom
+        };
+
+        ws.onclose = (event) => {
+            console.log("WebSocket disconnected", event);
+            chatbox.innerHTML += "<p><em>Disconnected from chat.</em></p>";
+        };
+
+        ws.onerror = (error) => {
+            console.error("WebSocket error:", error);
+            chatbox.innerHTML += `<p style="color: red;"><em>WebSocket error: ${error.message}</em></p>`;
+        };
+
+        sendButton.addEventListener("click", sendMessage);
+        messageInput.addEventListener("keypress", (event) => {
+            if (event.key === "Enter") {
+                sendMessage();
+            }
+        });
+
+        function sendMessage() {
+            const message = messageInput.value;
+            if (message.trim() === "") return;
+
+            chatbox.innerHTML += `<p class="user-message"><strong>You:</strong> ${message}</p>`;
+            ws.send(message);
+            messageInput.value = "";
+            chatbox.scrollTop = chatbox.scrollHeight; // Scroll to bottom
+        }
+    </script>
+</body>
+</html>
