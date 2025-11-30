@@ -17,17 +17,17 @@
 - [X] T012 Content Generation: Create Markdown files for Weeks 1-4 ONLY (Physical AI, Hardware, ROS 2, Bridge) in `docs-frontend/docs/`.
 - [X] T013 Build Check: Run `npm run build` locally to verify the book renders correctly.
 - [X] T014 Verify Phase 1: Manually verify all tasks in Phase 1 are complete and functional.
-- [ ] T015 Git Merge: `git checkout main && git merge feature/book-v1`
+- [X] T015 Git Merge: `git checkout main && git merge feature/book-v1`
 
 ## Phase 2: The Brain (Backend & Memory) - `feature/rag-backend`
-- [ ] T016 Git Checkout: `git checkout -b feature/rag-backend`
-- [ ] T017 Backend Init: Initialize Python environment in `backend/` using `uv`. Install `fastapi`, `uvicorn`, `qdrant-client`, `openai-agents-sdk`, `google-generativeai`, `better_auth`, `SQLAlchemy`, `asyncpg`.
-- [ ] T018 Qdrant Client: Implement `backend/core/qdrant_client.py` (Singleton pattern to manage connection to Qdrant Cloud).
-- [ ] T019 Ingestion Script: Create `backend/ingest.py` to recursively scan `docs-frontend/docs/`, chunk text based on Markdown headers, generate vector embeddings using OpenAI `text-embedding-3-small`, and upsert payloads (Text + Metadata + Vector) into a dedicated Qdrant collection.
-- [ ] T020 Seed Data: Execute `backend/ingest.py` to seed the vector database with the Week 1-4 content.
-- [ ] T021 Verify Phase 2: Manually verify all tasks in Phase 2 are complete and functional.
+- [X] T016 Git Checkout: `git checkout -b feature/rag-backend`
+- [X] T017 Backend Init: Initialize Python environment in `backend/` using `uv`. Install `fastapi`, `uvicorn`, `qdrant-client`, `openai-agents`, `openai`, `google-generativeai`, `passlib`, `python-jose`, `sqlalchemy`, `asyncpg`.
+- [X] T018 Qdrant Client: Implement `backend/core/qdrant_client.py` (Singleton pattern to manage connection to Qdrant Cloud).
+- [X] T019 Ingestion Script: Create `backend/ingest.py` to recursively scan `docs-frontend/docs/`, chunk text based on Markdown headers, generate vector embeddings, and upsert payloads (Text + Metadata + Vector) into a dedicated Qdrant collection.
+- [X] T020 Seed Data: Execute `backend/ingest.py` to seed the vector database with the Week 1-4 content.
+- [X] T021 Verify Phase 2: Manually verify all tasks in Phase 2 are complete and functional.
 - [ ] T022 Git Merge: `git checkout main && git merge feature/rag-backend`
-
+ 
 ## Phase 3: The Intelligence (Agents & Skills) - `feature/agent-core`
 - [ ] T023 Git Checkout: `git checkout -b feature/agent-core`
 - [ ] T024 FastAPI Core: Create `backend/main.py` and define the root application and specific WebSocket endpoint `/ws/v1/chat` for real-time bidirectional communication.
