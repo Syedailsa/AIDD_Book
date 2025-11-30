@@ -1,0 +1,87 @@
+---
+sidebar_position: 1
+slug: /week-1/chapter-1-from-digital-to-physical
+title: "Chapter 1: From Digital to Physical"
+description: "Week 1: Physical AI"
+---
+
+# Chapter 1: From Digital to Physical
+
+# Week 1: Physical AI
+
+This week, we will explore the fundamental concepts of Physical AI, focusing on how artificial intelligence is integrated into robotic systems to enable them to interact with the physical world. We will cover topics such as:
+
+## Why Physical AI Matters (The shift from screen to reality)
+
+# Chapter 1: From Digital to Physical
+
+## Introduction to Physical AI
+
+This week, we bridge the gap between software algorithms and hardware reality. We explore how Artificial Intelligence is evolving from generating text and images to controlling matter and energy in the real world.
+
+## Why Physical AI Matters
+### The Shift from Screen to Reality
+
+For the past decade, the "AI Revolution" has been largely confined to screens—processing data, generating text, and recommending videos. **Physical AI** marks the transition from the world of **Bits** (digital, infinite, cost-free replication) to the world of **Atoms** (physical, constrained, expensive).
+
+### The Great Convergence
+Physical AI matters now because three distinct technologies have converged to solve **Moravec’s Paradox**: 
+
+> *“It is comparatively easy to make computers exhibit adult level performance on intelligence tests or playing checkers, and difficult or impossible to give them the skills of a one-year-old when it comes to perception and mobility.”*
+
+1.  **The Brain (Foundation Models):** LLMs and VLA (Vision-Language-Action) models provide the reasoning capabilities previously missing in robotics.
+2.  **The Body (Hardware):** Actuators and sensors have become cheaper, lighter, and more energy-dense (e.g., quasi-direct drive motors).
+3.  **The Simulator (Sim-to-Real):** Photorealistic physics engines (NVIDIA Isaac Sim) allow robots to learn millions of years of experience in days before touching real hardware.
+
+### The Economic Imperative
+This shift is not just technical; it is economic. While digital AI automates information processing, Physical AI automates **physical labor**.
+
+* **Labor Shortages:** Addressing gaps in manufacturing, logistics, and elder care.
+* **Safety:** Removing humans from hazardous environments (mining, disaster recovery).
+* **Precision:** Performing surgical or micro-assembly tasks beyond human dexterity.
+
+---
+
+## Embodied Intelligence Defined
+
+**Embodied Intelligence** is the theory that intelligent behavior emerges from the interaction between a brain (controller), a body (morphology), and the environment. It stands in contrast to "Computationalism," which views intelligence purely as symbol processing.
+
+### The Trinity of Embodiment
+In an embodied system, intelligence is not just in the code; it is distributed across three pillars:
+
+1.  **The Agent (Brain + Body)**
+    * The software policy (Neural Network) makes decisions.
+    * The hardware morphology (arrangement of limbs/sensors) simplifies those decisions. 
+    * *Example: A passive walker robot walks down a slope without a brain, purely due to its mechanical design.*
+
+2.  **The Environment (Physics)**
+    * The agent does not exist in a vacuum. It must contend with gravity, friction, inertia, and chaos.
+    * The environment provides feedback (reward/punishment) that drives learning.
+
+3.  **The Interaction (Perception-Action Loop)**
+    * **Sense:** Sensors (Cameras, Lidar, IMU) capture the state of the world.
+    * **Think:** The model processes this state and plans a trajectory.
+    * **Act:** Actuators apply force to change the state of the robot or the world.
+
+---
+
+# AI in Robotics Applications
+
+### Real-World Examples
+* **Industrial Robots:** High-precision arms (e.g., KUKA, FANUC) used for welding and assembly. They are strong but traditionally "blind" and caged for safety.
+* **Autonomous Vehicles:** Cars (Waymo, Tesla) that use Physical AI to navigate traffic, interpreting complex human behaviors and road rules.
+* **Humanoid Robots:** General-purpose bipedal robots (Tesla Optimus, Figure 01) designed to fit into human-centric environments (stairs, doors) and perform varied tasks like folding laundry or factory labor.
+
+### Challenges and Future Directions in Physical AI
+* **Sim-to-Real Gap:** Policies trained in simulation often fail in the real world due to imperfect physics modeling (friction, material softness).
+* **Power Efficiency:** Human brains run on ~20 Watts; robots currently require massive batteries and GPUs to perform similar tasks.
+* **Generalization:** A robot trained to open a specific door often fails when the door handle shape changes. The future lies in **Foundation Models for Robotics** (e.g., RT-2) that can generalize across different objects and environments.
+
+### Key Distinction: AI vs. Physical AI
+
+| Feature | Traditional AI (Internet AI) | Physical AI (Embodied AI) |
+| :--- | :--- | :--- |
+| **Domain** | Digital, Static, Structured | Physical, Dynamic, Unstructured |
+| **Cost of Failure** | Incorrect Text (Hallucination) | Physical Damage or Injury |
+| **Data Source** | Scraped Internet Data | Real-time Sensor Fusion |
+| **Physics** | Irrelevant | The Fundamental Constraint |

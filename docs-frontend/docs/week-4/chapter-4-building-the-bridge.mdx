@@ -1,0 +1,82 @@
+---
+sidebar_position: 4
+slug: /week-4/chapter-4-building-the-bridge
+title: "Chapter 4: Building the Bridge"
+description: "Week 4: Building the Bridge"
+---
+
+# Chapter 4: Building the Bridge
+
+This week, we will focus on bridging the gap between theoretical AI concepts and practical robotic implementations. This involves understanding how different software and hardware components communicate and integrate to form a cohesive robotic system. We will cover:
+
+## Using `rclpy` to Bridge Python Agents to Robot Controllers
+
+While ROS 2 supports C++, **Python** is the language of modern AI (PyTorch, TensorFlow, OpenAI). To control a robot with an AI Agent, we need a bridge that allows our standard Python scripts to "speak" to the robot's nervous system. That bridge is **`rclpy`** (ROS Client Library for Python).
+
+### The Bridge Architecture
+In a Physical AI system, the architecture typically looks like this:
+
+1.  **The Brain (Pure Python):** An LLM or Reinforcement Learning agent running in a standard Python environment. It decides *what* to do (e.g., "Pick up the apple").
+2.  **The Bridge (rclpy):** A translation layer that converts the high-level intent into specific ROS messages.
+3.  **The Body (ROS 2):** The hardware drivers that execute the command (e.g., moving the servo motors).
+
+### Code Example: The Minimal Bridge
+Here is how a simple Python script uses `rclpy` to send velocity commands to a robot.
+
+```python
+import rclpy
+from rclpy.node import Node
+from geometry_msgs.msg import Twist
+
+class AgentBridge(Node):
+    def __init__(self):
+        super().__init__('ai_agent_bridge')
+        # Create a publisher that talks to the robot's wheels
+        self.publisher_ = self.create_publisher(Twist, '/cmd_vel', 10)
+
+    def move_forward(self):
+        msg = Twist()
+        msg.linear.x = 0.5  # Move forward at 0.5 m/s
+        msg.angular.z = 0.0
+        self.publisher_.publish(msg)
+        self.get_logger().info('Agent commanded: Forward March')
+
+def main(args=None):
+    rclpy.init(args=args)
+    bridge = AgentBridge()
+    
+    # In a real AI Loop, the agent decides when to call this
+    bridge.move_forward()
+
+    bridge.destroy_node()
+    rclpy.shutdown()
+```
+
+# Understanding URDF (Unified Robot Description Format) for Humanoids.
+
+If the code is the soul, the URDF (Unified Robot Description Format) is the DNA. It is an XML file that describes exactly what the robot looks like and how it moves. Without a URDF, the physics simulator (Isaac Sim/Gazebo) cannot spawn the robot.
+
+## The Anatomy of a URDF
+ 
+A robot is defined as a tree structure made of two fundamental building blocks:
+
+### 1. Links (The Bones)
+A Link represents a rigid body part (e.g., "Forearm," "Shin," "Head").
+
+**Visual:** What it looks like (usually a .stl or .dae 3D mesh file).
+
+**Collision:** A simplified shape (box/cylinder) used by the physics engine to calculate contacts. Note: We use simple shapes for collision to save CPU power.
+
+**Inertial:** The mass and center of gravity. If this is wrong, your simulated robot will fall over instantly.
+
+### 2. Joints (The Muscles)
+
+A Joint connects two Links and defines how they move relative to each other.
+
+**Fixed Joint:** No movement (e.g., a camera screwed onto the head).
+
+**Revolute Joint:** Rotates around an axis (e.g., a knee or elbow). Has limits (min/max angle).
+
+**Continuous Joint:** Rotates forever (e.g., a wheel).
+
+**Prismatic Joint:** Slides along a line (e.g., a linear actuator or elevator).

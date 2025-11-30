@@ -1,0 +1,85 @@
+---
+sidebar_position: 2
+slug: /week-2/chapter-2-the-hardware-of-humanoids
+title: "Chapter 2: The Hardware of Humanoids"
+description: "Week 2: The Hardware of Humanoids"
+---
+
+# Chapter 2: The Hardware of Humanoids
+
+Building a Physical AI lab is technically demanding. It sits at the intersection of three heavy computational loads: **Physics Simulation** (Isaac Sim/Gazebo), **Visual Perception** (SLAM/Computer Vision), and **Generative AI** (LLMs/VLA).
+
+To conquer this, we divide our hardware into two categories: the **Training Rig** (The Digital Twin Workstation) and the **Inference Engine** (The Edge Kit).
+
+---
+
+## The "Digital Twin" Workstation
+
+Before a robot takes its first step in the real world, it walks a million miles in a simulation. This concept is called the **Digital Twin**.
+
+
+
+Running photorealistic simulations like **NVIDIA Isaac Sim** (built on Omniverse) requires "RTX" (Ray Tracing) capabilities and massive video memory. Standard laptops (MacBooks or non-RTX Windows machines) simply cannot handle the load of rendering complex USD (Universal Scene Description) assets while calculating rigid body dynamics.
+
+### Minimum vs. Ideal Specifications
+
+| Component | Minimum Requirement | The "Sim-to-Real" Ideal | Why it Matters |
+| :--- | :--- | :--- | :--- |
+| **GPU** | NVIDIA RTX 4070 Ti (12GB VRAM) | **RTX 3090 / 4090 (24GB VRAM)** | **The Bottleneck.** You need high VRAM to load the robot assets and run Vision-Language-Action (VLA) models simultaneously. |
+| **CPU** | Intel Core i7 (13th Gen) | **AMD Ryzen 9 or Threadripper** | Physics calculations (gravity, friction, collision) in Gazebo/Isaac are CPU-intensive. |
+| **RAM** | 32 GB DDR5 | **64 GB DDR5** | 32GB is the absolute floor; complex scenes will crash without 64GB. |
+| **OS** | Windows 11 (for Sim only) | **Ubuntu 22.04 LTS** | ROS 2 (Humble/Iron) is native to Linux. Dual-booting or a dedicated Linux machine is mandatory for a friction-free experience. |
+
+:::danger Warning: The VRAM Trap
+Do not attempt to run Isaac Sim on GPUs with less than 12GB of VRAM (e.g., RTX 3060 or 4060). The application will likely crash when loading the Humanoid environment.
+:::
+
+---
+
+## Edge Computing Kits (NVIDIA Jetson Orin)
+
+While the Workstation is the "Gym" where the AI trains, the **Edge Kit** is the actual brain inside the robot's head.
+
+
+
+Since we cannot fit an RTX 4090 inside a small robot, we use **Embedded Supercomputers**. The industry standard for this is the **NVIDIA Jetson** platform.
+
+### The Brain: NVIDIA Jetson Orin
+Students will deploy their ROS 2 nodes here to understand the constraints of real-world robotics (thermal limits, power consumption, and latency).
+
+#### 1. Jetson Orin Nano (8GB)
+* **Role:** Entry-level inference.
+* **Performance:** ~40 TOPS (Trillions of Operations Per Second).
+* **Best For:** Running basic VSLAM and path planning. It struggles with heavy VLA (Vision-Language-Action) models.
+* **Cost:** Affordable (~$250-$300).
+
+#### 2. Jetson Orin NX (16GB)
+* **Role:** Advanced embodied intelligence.
+* **Performance:** ~100 TOPS.
+* **Best For:** Running local LLMs (like Llama-3-8B-Quantized) alongside the navigation stack.
+* **Cost:** Mid-range (~$600+).
+
+---
+
+## Sensor Systems
+
+If the Jetson is the brain, these are the sensory organs. A robot is blind and deaf without high-fidelity data streams.
+
+
+
+### 1. The Eyes: Depth Cameras (RGB-D)
+Standard cameras (2D) are insufficient for robotics because they lack **Depth**. A robot needs to know *how far away* the wall is, not just that there is a wall.
+* **Standard:** **Intel RealSense D435i** or **D455**.
+* **Function:** Provides a colored point cloud. It projects an infrared pattern to calculate distance (Active Stereo IR).
+* **Why the "i"?** The "i" stands for IMU (Inertial Measurement Unit) inside the camera, which helps verify movement data.
+
+### 2. The Spatial Sense: LiDAR
+**LiDAR (Light Detection and Ranging)** uses spinning lasers to create a precise 2D or 3D map of the room.
+* **Role:** The primary sensor for **SLAM** (Simultaneous Localization and Mapping). It answers the question: *"Where am I on the map?"*
+* **2D LiDAR:** Scans a single slice of the room (good for floor-level obstacle avoidance).
+* **3D LiDAR:** Scans the entire volume (essential for humanoids walking on uneven terrain).
+
+### 3. The Inner Ear: IMU (BNO055)
+The **Inertial Measurement Unit** is critical for balance.
+* **Components:** Accelerometer (Speed), Gyroscope (Rotation), Magnetometer (Direction).
+* **Function:** It tells the robot which way is "Down" (Gravity vector) and if it is falling over. For a bipedal humanoid, the IMU loop must run at **1000Hz** (1000 times per second) to keep the robot upright.

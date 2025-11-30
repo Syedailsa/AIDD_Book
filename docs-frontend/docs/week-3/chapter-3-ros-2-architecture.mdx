@@ -1,0 +1,62 @@
+---
+sidebar_position: 3
+slug: /week-3/chapter-3-ros-2-architecture
+title: "Chapter 3: ROS 2 Architecture"
+description: "Week 3: ROS 2 Architecture"
+---
+
+# Chapter 3: ROS 2 Architecture
+
+## Nodes, Topics, and Services Explained
+
+If a robot is a body, **ROS 2** (Robot Operating System) is its nervous system. It creates a standardized way for different parts of the robot (camera, wheels, brain) to share information without needing to know the complex implementation details of one another.
+
+### 1. Nodes: The Neurons
+A **Node** is the fundamental unit of computation. Ideally, each node is a modular process responsible for one specific task.
+* **Modularity:** Instead of writing one giant script called `run_robot.py`, we split the code into `camera_node`, `motor_controller_node`, and `path_planner_node`.
+* **Benefit:** If the camera driver crashes, the rest of the robot stays alive. You can also easily swap a `real_camera_node` for a `simulated_camera_node` without changing the rest of the code.
+
+### 2. Topics: The Bloodstream (Publish/Subscribe)
+**Topics** are used for continuous, high-frequency data streams. This is a **many-to-many** communication model.
+* **Mechanism:** A node "Publishes" data to a named channel (e.g., `/scan`). Any other node can "Subscribe" to that channel.
+* **Analogy:** A Radio Broadcast. The DJ (Publisher) broadcasts music. Millions of listeners (Subscribers) can tune in. The DJ does not know or care who is listening.
+* **Use Case:** Sensor data (LiDAR, Cameras), Robot State (Position, Velocity).
+
+### 3. Services: The Reflexes (Request/Response)
+**Services** are used for discrete, synchronous tasks. This is a **one-to-one** communication model.
+* **Mechanism:** A Client node sends a "Request" to a Server node and waits (blocks) until it receives a "Response."
+* **Analogy:** A Phone Call. You call a pizza place (Request). You wait on the line until they confirm the order (Response). You cannot do anything else until the call is done.
+* **Use Case:** "Reset the simulation," "Take a picture now," "Calibrate the IMU."
+
+| Feature | Topics | Services |
+| :--- | :--- | :--- |
+| **Pattern** | Publish / Subscribe | Request / Response |
+| **Direction** | One-way (Fire and Forget) | Two-way (Handshake) |
+| **Blocking** | Asynchronous (Non-blocking) | Synchronous (Blocking) |
+| **Best For** | Streaming Data (10Hz+) | Occasional Commands |
+
+---
+
+## The Graph Architecture
+
+The **ROS Graph** is the dynamic network of all active nodes and the connections (Topics/Services) between them. Unlike ROS 1, which relied on a central "Master" server to connect nodes, ROS 2 is fully distributed.
+
+
+
+### 1. Discovery (How Nodes Find Each Other)
+When you start a node, how does it know another node exists?
+* **DDS (Data Distribution Service):** ROS 2 is built on top of an industrial networking standard called DDS.
+* **Multicast:** When a node starts, it sends a "multicast" message to the network (like shouting "I am here!" in a crowded room).
+* **Participant Discovery:** Other nodes hear this and automatically update their internal list of peers. This happens in the background, making the network truly decentralized.
+
+### 2. The Abstraction Layers
+ROS 2 is designed to be flexible. It does not force you to use one specific network protocol.
+* **RCL (ROS Client Library):** The code you write (e.g., `rclpy` for Python or `rclcpp` for C++).
+* **RMW (ROS Middleware):** The translation layer. It translates your Python commands into the underlying DDS standard.
+* **DDS Vendor:** You can swap the underlying "engine" (e.g., from *Fast DDS* to *Cyclone DDS*) just by installing a plugin, without changing your robot's code.
+
+### 3. Introspection
+Since the graph is dynamic, we need tools to visualize it.
+* `ros2 node list`: Shows all active neurons.
+* `ros2 topic list`: Shows all active data streams.
+* `rqt_graph`: A GUI tool that draws the live network, allowing you to debug broken connections visually.
